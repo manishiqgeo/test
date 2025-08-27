@@ -1,0 +1,29 @@
+# build/Dockerfile
+FROM python:3.10-slim
+
+# sane Python defaults
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# create non-root user/group
+# -r = system account (no password); -m = home dir
+RUN groupadd -r app && useradd -r -g app -m appuser
+
+# workdir for the app
+WORKDIR /app
+
+# install dependencies first (better layer cache)
+# (remember: context is `source/`, so these paths are relative to that)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# copy app code and give ownership to non-root
+COPY --chown=appuser:appuser . .
+
+# drop privileges
+USER appuser
+
+# expose and run (make sure your app binds 0.0.0.0:8080 and entry is wsgi:app)
+EXPOSE 8080
+CMD ["gunicorn", "-w", "1", "--threads", "2", "-b", "0.0.0.0:8080", "wsgi:app"]
+
