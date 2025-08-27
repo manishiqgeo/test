@@ -14,11 +14,11 @@ WORKDIR /app
 
 # install dependencies first (better layer cache)
 # (remember: context is `source/`, so these paths are relative to that)
-COPY requirements.txt .
+COPY source/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # copy app code and give ownership to non-root
-COPY --chown=appuser:appuser . .
+COPY --chown=appuser:appuser source/ .
 
 # drop privileges
 USER appuser
