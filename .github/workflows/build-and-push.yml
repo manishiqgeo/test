@@ -44,7 +44,7 @@ jobs:
           file: build/Dockerfile          # your Dockerfile lives in build/
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           tags: |
-            ${{ secrets.AWS_KEY }}.dkr.ecr.us-west-2.amazonaws.com/myapp:latest
-            ${{ secrets.AWS_KEy }}.dkr.ecr.us-west-2.amazonaws.com/myapp:${{ github.sha }}
+            003083320908.dkr.ecr.us-east-2.amazonaws.com/dev/myapp:latest
+            003083320908.dkr.ecr.us-east-2.amazonaws.com/dev/myapp:${{ github.sha }}
           
 
